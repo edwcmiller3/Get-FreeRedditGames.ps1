@@ -57,6 +57,7 @@ Function Get-FreeRedditGames {
         #Get free game deals excluding titles like "DRM-free" and "free shipping"
         $FreeDeals = $GameDeals.Where({ (("free" -in $_.outerText.ToString().Split()) -or ("(free)" -in $_.outerText.ToString().Split())) `
                                 -and ("shipping" -notin $_.outerText.ToString().Split()) })
+        #Regex needs work
         #[System.Text.RegularExpressions.Regex]::Replace("(free)", "[()]", "")
         
         #Add results to hash table
@@ -81,14 +82,14 @@ Function Get-FreeRedditGames {
 
         #If Alert switch used, send an email alert
         If ($Alert -and $HashFreeDeals.Count) {
-            $From = "PowerShellEmailBot@gmail.com"
-            $To = "8652918872@tmomail.net"
+            $From = "ScriptEmail@something.com"
+            $To = "YourEmailOrPhoneNumber@something.com"
             $Subject = "Free Reddit Game Script Alert"
             $Body = ($HashFreeDeals.Keys | ForEach-Object {
                 "$_`r`n$($HashFreeDeals[$_])"
                 } ) -join "`r`n`n"
-            $SMTPServer = "smtp.gmail.com"
-            $SMTPPort = "587"
+            $SMTPServer = "smtp.email.com"
+            $SMTPPort = "###"
             Try {
                 #Attempt to send mail alert with deals
                 Send-MailMessage -From $From -To $To -Subject $Subject -Body $Body -SmtpServer $SMTPServer -Port $SMTPPort -UseSsl -Credential $Cred
